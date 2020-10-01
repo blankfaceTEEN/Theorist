@@ -11,6 +11,9 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("form.fxml"));
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/form.fxml"));
+        Controller controller = loader.getController();
         primaryStage.setTitle("Theorist"); // заголовок окна
         primaryStage.setScene(new Scene(root, 500, 500)); // выбор сцены
 
