@@ -3,11 +3,22 @@ package main;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
+import java.awt.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class Controller {
+    List<Double> nums;
+    List<Integer> openingBrackets;
+    List<Integer> closingBrackets;
+    Map<Integer, String> operators;
+
 
     @FXML
     private TextField textField;
+
+    List<String> in;
 
     public void outOne() {
         if (!textField.getText().equals("0"))
@@ -15,6 +26,56 @@ public class Controller {
         else
             textField.setText("1");
     }
+
+    public double operation(int k) {
+        switch(operators.get(k)) {
+            case "+": return nums.get(k) + nums.get(k + 1);
+            case "-": return nums.get(k) - nums.get(k + 1);
+            case "*": return nums.get(k) * nums.get(k + 1);
+            case "/": return nums.get(k) / nums.get(k + 1);
+            case "**": return Math.pow(nums.get(k), nums.get(k + 1));
+            case "//": return Math.round(nums.get(k) / nums.get(k + 1));
+            case "%": return nums.get(k) % nums.get(k + 1);
+            default: return 0;
+        }
+    }
+    public void borderW(int i) {
+        nums.set(i, operation(i));
+        nums.remove(i + 1);
+        operators.remove(i);
+    }
+
+    public void outEquality()
+    {
+        in.addAll(Arrays.asList(textField.getText().split(" ")));
+        if (textField.getText().toCharArray()[textField.getText().length() - 1] == '.')
+            textField.setText(textField.getText() + "0");
+
+        for(int i = 0; i < in.size(); i++) {
+            if(in.get(i).contains("\\d")) {
+                nums.add(Double.parseDouble(in.get(i)));
+            }
+            else if(in.get(i).contains("(")) {
+                openingBrackets.add(i);
+            }
+            else if(in.get(i).contains(")")) {
+                closingBrackets.add(i);
+            }
+            else {
+                operators.put(i, in.get(i));
+            }
+        }
+        int firBorder = 0;
+        int secBorder = in.size();
+        if(openingBrackets.isEmpty()) {
+            for (int i : operators.keySet()) {
+                if(!in.get(i).contains("[^+-]")) {
+                    borderW(i);
+                }
+            }
+        }
+    }
+
 
     public void outTwo() {
         if (!textField.getText().equals("0"))
