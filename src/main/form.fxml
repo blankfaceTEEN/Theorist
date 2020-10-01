@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controller">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controller">
    <children>
       <Pane fx:id="outPane" prefHeight="88.0" prefWidth="500.0" style="-fx-background-color: gray;">
          <children>
@@ -48,7 +48,7 @@
                   <Button mnemonicParsing="false" onAction="#outNine" prefHeight="125.0" prefWidth="180.0" text="9" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                   <Button mnemonicParsing="false" onAction="#outNull" prefHeight="97.0" prefWidth="147.0" text="0" GridPane.rowIndex="5" />
                   <Button mnemonicParsing="false" onAction="#outDot" prefHeight="92.0" prefWidth="157.0" text="." GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                  <Button mnemonicParsing="false" prefHeight="101.0" prefWidth="140.0" text="=" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                  <Button mnemonicParsing="false" onAction="#outEquality" prefHeight="101.0" prefWidth="140.0" text="=" GridPane.columnIndex="2" GridPane.rowIndex="5">
                      <font>
                         <Font name="System Bold" size="24.0" />
                      </font>
