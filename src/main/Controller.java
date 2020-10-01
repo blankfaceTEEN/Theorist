@@ -68,15 +68,14 @@ public class Controller {
                 operators.put(i, in.get(i));
             }
         }
-        int firBorder = 0;
-        int secBorder = in.size();
         if(openingBrackets.isEmpty()) {
-            for (int i : operators.keySet()) {
-                if(!in.get(i).contains("[^+-]")) {
-                    borderW(i);
+            if(!operators.containsValue("[^+-]")) {
+                for(int i = 0; i < operators.size(); i++) {
+                    borderW(0);
                 }
             }
         }
+        textField.setText(nums.get(0).toString());
     }
 
 
