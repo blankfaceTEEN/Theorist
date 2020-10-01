@@ -12,8 +12,7 @@ public class Controller {
     List<Double> nums;
     List<Integer> openingBrackets;
     List<Integer> closingBrackets;
-    Map<Integer, String> operators;
-
+    Map<Integer, String> operators;]
 
     private int openBracketCount = 0;
     private int closeBracketCount = 0;
