@@ -6,6 +6,10 @@ import javafx.scene.control.TextField;
 
 public class Controller {
 
+    private int openBracketCount = 0;
+    private int closeBracketCount = 0;
+    private boolean dot = false;
+
     @FXML
     private TextField textField;
 
@@ -78,10 +82,18 @@ public class Controller {
     }
 
     public void outDot() {
-        if (!textField.getText().equals("0") && !textField.getText().contains("."))
+        if (!textField.getText().equals("0")
+            && (dot == false)
+            && !(textField.getText().toCharArray()[textField.getText().length() - 1] == '.')
+            && !(textField.getText().toCharArray()[textField.getText().length() - 1] == ' '))
+        {
             textField.setText(textField.getText() + ".");
-        else if (textField.getText().equals("0"))
+            dot = true;
+        }
+        else if (textField.getText().equals("0") && (dot == false)) {
             textField.setText("0.");
+            dot = true;
+        }
     }
 
     public void outBack() {
@@ -92,69 +104,87 @@ public class Controller {
     public void outClear() {
         if (!textField.getText().equals("0"))
             textField.setText("0");
+        openBracketCount = 0;
+        closeBracketCount = 0;
     }
 
     public void outPlus() {
         if (!textField.getText().equals("0"))
-            textField.setText(textField.getText() + "+");
+            textField.setText(textField.getText() + " + ");
         else
-            textField.setText("0+");
+            textField.setText("0 + ");
+        dot = false;
     }
 
     public void outMinus() {
         if (!textField.getText().equals("0"))
-            textField.setText(textField.getText() + "-");
+            textField.setText(textField.getText() + " - ");
         else
-            textField.setText("0-");
+            textField.setText("0 - ");
+        dot = false;
     }
 
     public void outMult() {
         if (!textField.getText().equals("0"))
-            textField.setText(textField.getText() + "*");
+            textField.setText(textField.getText() + " * ");
         else
-            textField.setText("0*");
+            textField.setText("0 * ");
+        dot = false;
     }
 
     public void outDivide() {
         if (!textField.getText().equals("0"))
-            textField.setText(textField.getText() + "/");
+            textField.setText(textField.getText() + " / ");
         else
-            textField.setText("0/");
+            textField.setText("0 / ");
+        dot = false;
     }
 
     public void outRemainder() {
         if (!textField.getText().equals("0"))
-            textField.setText(textField.getText() + "%");
+            textField.setText(textField.getText() + " % ");
         else
-            textField.setText("0%");
+            textField.setText("0 % ");
+        dot = false;
     }
 
     public void outIntDiv() {
         if (!textField.getText().equals("0"))
-            textField.setText(textField.getText() + "//");
+            textField.setText(textField.getText() + " // ");
         else
-            textField.setText("0//");
+            textField.setText("0 // ");
+        dot = false;
     }
 
     public void outPow() {
         if (!textField.getText().equals("0"))
-            textField.setText(textField.getText() + "**");
+            textField.setText(textField.getText() + " ** ");
         else
-            textField.setText("0**");
+            textField.setText("0 ** ");
+        dot = false;
     }
 
     public void outOpenBracket() {
-        if (!textField.getText().equals("0"))
+        if (!textField.getText().equals("0")
+            && textField.getText().toCharArray()[textField.getText().length() - 1] == ' ')
+        {
             textField.setText(textField.getText() + "(");
-        else
+            openBracketCount++;
+            dot = false;
+        }
+        else if (textField.getText().equals("0")) {
             textField.setText("(");
+            openBracketCount++;
+            dot = false;
+        }
     }
 
     public void outCloseBracket() {
-        if (!textField.getText().equals("0"))
+        if (!textField.getText().equals("0") && (openBracketCount > closeBracketCount)) {
             textField.setText(textField.getText() + ")");
-        else
-            textField.setText(")");
+            closeBracketCount++;
+            dot = false;
+        }
     }
 
 }
