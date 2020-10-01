@@ -121,4 +121,40 @@ public class Controller {
         else
             textField.setText("0/");
     }
+
+    public void outRemainder() {
+        if (!textField.getText().equals("0"))
+            textField.setText(textField.getText() + "%");
+        else
+            textField.setText("0%");
+    }
+
+    public void outIntDiv() {
+        if (!textField.getText().equals("0"))
+            textField.setText(textField.getText() + "//");
+        else
+            textField.setText("0//");
+    }
+
+    public void outPow() {
+        if (!textField.getText().equals("0"))
+            textField.setText(textField.getText() + "**");
+        else
+            textField.setText("0**");
+    }
+
+    public void outOpenBracket() {
+        if (!textField.getText().equals("0"))
+            textField.setText(textField.getText() + "(");
+        else
+            textField.setText("(");
+    }
+
+    public void outCloseBracket() {
+        if (!textField.getText().equals("0"))
+            textField.setText(textField.getText() + ")");
+        else
+            textField.setText(")");
+    }
+
 }
