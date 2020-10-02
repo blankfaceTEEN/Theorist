@@ -44,7 +44,7 @@ public class Controller {
         nums.remove(i + 1);
         operators.remove(i);
     }
-    public void borderW(int i, int k) {
+    public void borderW(int i) {
         nums.set(i + openBracketCount, operation(i + openBracketCount));
         nums.remove(i + openBracketCount + 1);
         operators.remove(i);
@@ -102,12 +102,12 @@ public class Controller {
                 for(int j = 0; j < openBracketCount; j++) {
                     if (!operators.contains("[^+-]")) {
                         for (int i = 0; i < operators.size(); i++) {
-                            borderL(0);
+                            borderW(0);
                         }
                     } else if (operators.contains("[^+-]")) {
                         for (int i = 0; i < operators.size(); i++) {
                             if (operators.get(i).contains("[^+-]")) {
-                                borderL(i);
+                                borderW(i);
                                 break;
                             }
                         }
