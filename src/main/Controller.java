@@ -4,15 +4,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
 import java.awt.*;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class Controller {
-    List<Double> nums;
-    List<Integer> openingBrackets;
-    List<Integer> closingBrackets;
-    Map<Integer, String> operators;
+    List<Double> nums = new LinkedList<>();
+    List<String> operators = new LinkedList<>();
+    Map<Integer, Integer> brackets = new HashMap<>();
+    List<String> in = new LinkedList<>();
 
     private int openBracketCount = 0;
     private int closeBracketCount = 0;
@@ -20,8 +19,6 @@ public class Controller {
 
     @FXML
     private TextField textField;
-
-    List<String> in;
 
     public void outOne() {
         if (!textField.getText().equals("0"))
@@ -42,36 +39,79 @@ public class Controller {
             default: return 0;
         }
     }
-    public void borderW(int i) {
+    public void borderL(int i) {
         nums.set(i, operation(i));
         nums.remove(i + 1);
+        operators.remove(i);
+    }
+    public void borderW(int i) {
+        nums.set(i + openBracketCount, operation(i + openBracketCount));
+        nums.remove(i + openBracketCount + 1);
         operators.remove(i);
     }
 
     public void outEquality()
     {
-        in.addAll(Arrays.asList(textField.getText().split(" ")));
+        in = Arrays.asList(textField.getText().split(" "));
         if (textField.getText().toCharArray()[textField.getText().length() - 1] == '.')
             textField.setText(textField.getText() + "0");
 
         for(int i = 0; i < in.size(); i++) {
-            if(in.get(i).contains("\\d")) {
+            if(in.get(i).matches("[\\d]")) {
                 nums.add(Double.parseDouble(in.get(i)));
             }
-            else if(in.get(i).contains("(")) {
-                openingBrackets.add(i);
+            else if(in.get(i).matches("\\(")) {
+                operators.add(Integer.toString(i));
             }
-            else if(in.get(i).contains(")")) {
-                closingBrackets.add(i);
-            }
-            else {
-                operators.put(i, in.get(i));
+            else if(in.get(i).matches("^\\)")) {
+                operators.add(in.get(i));
             }
         }
-        if(openingBrackets.isEmpty()) {
-            if(!operators.containsValue("[^+-]")) {
-                for(int i = 0; i < operators.size(); i++) {
-                    borderW(0);
+        int t = 0;
+
+        for (int i = in.size() - 1; i > 0; i--) {
+            if (in.get(i).equals("(")) {
+                for (int j = i; j < in.size(); j++) {
+                    if (!in.get(i).matches("[\\d]")) {
+                        t += 1;
+                        operators.set(i, Integer.toString(t));
+                    } else if (in.get(i).contains(")")) {
+                        break;
+                    }
+                }
+            }
+        }
+        while(!operators.isEmpty()) {
+            if (!operators.contains("(")) {
+                //bracketless block
+                if (!operators.contains("[^+-]")) {
+                    for (int i = 0; i < operators.size(); i++) {
+                        borderL(0);
+                    }
+                } else if (operators.contains("[^+-]")) {
+                    for (int i = 0; i < operators.size(); i++) {
+                        if (operators.get(i).contains("[^+-]")) {
+                            borderL(i);
+                            break;
+                        }
+                    }
+                }
+            }
+            else {
+                //brackets block
+                for(int j = 0; j < openBracketCount; j++) {
+                    if (!operators.contains("[^+-]")) {
+                        for (int i = 0; i < operators.size(); i++) {
+                            borderW(0);
+                        }
+                    } else if (operators.contains("[^+-]")) {
+                        for (int i = 0; i < operators.size(); i++) {
+                            if (operators.get(i).contains("[^+-]")) {
+                                borderW(i);
+                                break;
+                            }
+                        }
+                    }
                 }
             }
         }
