@@ -20,13 +20,6 @@ public class Controller {
     @FXML
     private TextField textField;
 
-    public void outOne() {
-        if (!textField.getText().equals("0"))
-            textField.setText(textField.getText() + "1");
-        else
-            textField.setText("1");
-    }
-
     public double operation(int k) {
         switch(operators.get(k)) {
             case "+": return nums.get(k) + nums.get(k + 1);
@@ -118,6 +111,12 @@ public class Controller {
         textField.setText(nums.get(0).toString());
     }
 
+    public void outOne() {
+        if (!textField.getText().equals("0"))
+            textField.setText(textField.getText() + "1");
+        else
+            textField.setText("1");
+    }
 
     public void outTwo() {
         if (!textField.getText().equals("0"))
