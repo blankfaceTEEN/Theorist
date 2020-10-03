@@ -32,58 +32,88 @@ public class Controller {
             default: return 0;
         }
     }
+    public double operationW(int k) {
+        switch(operators.get(k - openBracketCount)) {
+            case "+": return nums.get(k) + nums.get(k + 1);
+            case "-": return nums.get(k) - nums.get(k + 1);
+            case "*": return nums.get(k) * nums.get(k + 1);
+            case "/": return nums.get(k) / nums.get(k + 1);
+            case "**": return Math.pow(nums.get(k), nums.get(k + 1));
+            case "//": return Math.round(nums.get(k) / nums.get(k + 1));
+            case "%": return nums.get(k) % nums.get(k + 1);
+            default: return 0;
+        }
+    }
     public void borderL(int i) {
         nums.set(i, operation(i));
         nums.remove(i + 1);
         operators.remove(i);
     }
     public void borderW(int i) {
-        nums.set(i + openBracketCount, operation(i + openBracketCount));
+        nums.set(i + openBracketCount, operationW(i + openBracketCount));
         nums.remove(i + openBracketCount + 1);
         operators.remove(i);
     }
 
     public void outEquality()
     {
+        // Ввод
         in = Arrays.asList(textField.getText().split(" "));
         if (textField.getText().toCharArray()[textField.getText().length() - 1] == '.')
             textField.setText(textField.getText() + "0");
-
+        if (openBracketCount != closeBracketCount) {
+            textField.setText(textField.getText() + ")");
+        }
+        // Заполнение списков
         for(int i = 0; i < in.size(); i++) {
             if(in.get(i).matches("[\\d]")) {
                 nums.add(Double.parseDouble(in.get(i)));
             }
-            else if(in.get(i).matches("\\(")) {
+            else if(in.get(i).contains("(")) {
                 operators.add(Integer.toString(i));
             }
-            else if(in.get(i).matches("^\\)")) {
+            else if(!in.get(i).matches("[.).]")) {
                 operators.add(in.get(i));
             }
         }
+        for(String el : operators) {
+            System.out.println("pervaya " + el);
+        }
+        // Определение количества операций внутри каждых скобок
         int t = 0;
-
-        for (int i = in.size() - 1; i > 0; i--) {
+        for (int i = in.size() - 1; i >= 0; i--) {
             if (in.get(i).equals("(")) {
                 for (int j = i; j < in.size(); j++) {
-                    if (!in.get(i).matches("[\\d]")) {
+                    if (!in.get(j).matches("\\d+") && !in.get(j).contains(")") && !in.get(j).contains("(")) {
                         t += 1;
-                        operators.set(i, Integer.toString(t));
-                    } else if (in.get(i).contains(")")) {
+                        System.out.println(in.get(j));
+                        System.out.println(in.get(i));
+                        operators.set(i - t, Integer.toString(t));
+                    } else if (in.get(j).contains(")")) {
+                        t = 0;
                         break;
                     }
                 }
             }
         }
+        // Выполнение операций
+        for(String el : operators) {
+            System.out.println("vtoraya " + el);
+        }
         while(!operators.isEmpty()) {
-            if (!operators.contains("(")) {
-                //bracketless block
-                if (!operators.contains("[^+-]")) {
+            if (!operators.contains("1") && !operators.contains("2") && !operators.contains("3")
+                    && !operators.contains("4") && !operators.contains("5") && !operators.contains("6")
+                    && !operators.contains("7") && !operators.contains("8") && !operators.contains("9")) {
+                //без скобок
+                if (!operators.contains("*") && !operators.contains("/") && !operators.contains("//")
+                        && !operators.contains("%") && !operators.contains("**")) {
                     for (int i = 0; i < operators.size(); i++) {
                         borderL(0);
                     }
-                } else if (operators.contains("[^+-]")) {
+                }
+                else {
                     for (int i = 0; i < operators.size(); i++) {
-                        if (operators.get(i).contains("[^+-]")) {
+                        if (!operators.get(i).matches("[-+]")) {
                             borderL(i);
                             break;
                         }
@@ -91,23 +121,42 @@ public class Controller {
                 }
             }
             else {
-                //brackets block
+
+                //со скобками
                 for(int j = 0; j < openBracketCount; j++) {
-                    if (!operators.contains("[^+-]")) {
-                        for (int i = 0; i < operators.size(); i++) {
-                            borderW(0);
-                        }
-                    } else if (operators.contains("[^+-]")) {
-                        for (int i = 0; i < operators.size(); i++) {
-                            if (operators.get(i).contains("[^+-]")) {
-                                borderW(i);
-                                break;
+                    if (!operators.contains("*") && !operators.contains("/") && !operators.contains("//")
+                            && !operators.contains("%") && !operators.contains("**")) {
+                        for (int i = operators.size() - 1; i >= 0; i--) {
+                            if (operators.get(i).matches("\\d+")) {
+                                for(int l = i + 1; l < i + Integer.parseInt(operators.get(i)); l++) {
+                                    borderW(l);
+                                    operators.set(i, Integer.toString(Integer.parseInt(operators.get(i)) - 1));
+                                }
+                                openBracketCount -= 1;
+                                operators.remove(i);
                             }
                         }
+                    }
+                    else {
+                        for (int i = operators.size() - 1; i >= 0; i--) {
+                            if (operators.get(i).matches("\\d+")) {
+                                for(int l = i + 1; l < i + Integer.parseInt(operators.get(i)); l++) {
+                                    if (!operators.get(l).matches("[-+]")) {
+                                        borderW(i);
+                                        operators.set(i, Integer.toString(Integer.parseInt(operators.get(i)) - 1));
+                                        break;
+                                    }
+                                }
+                                openBracketCount -= 1;
+                                operators.remove(i);
+                            }
+                        }
+
                     }
                 }
             }
         }
+        // Вывод
         textField.setText(nums.get(0).toString());
     }
 
@@ -266,12 +315,12 @@ public class Controller {
         if (!textField.getText().equals("0")
             && textField.getText().toCharArray()[textField.getText().length() - 1] == ' ')
         {
-            textField.setText(textField.getText() + "(");
+            textField.setText(textField.getText() + "( ");
             openBracketCount++;
             dot = false;
         }
         else if (textField.getText().equals("0")) {
-            textField.setText("(");
+            textField.setText("( ");
             openBracketCount++;
             dot = false;
         }
@@ -279,7 +328,7 @@ public class Controller {
 
     public void outCloseBracket() {
         if (!textField.getText().equals("0") && (openBracketCount > closeBracketCount)) {
-            textField.setText(textField.getText() + ")");
+            textField.setText(textField.getText() + " )");
             closeBracketCount++;
             dot = false;
         }
